@@ -13,7 +13,6 @@ table
   subject { described_class.new(3) }
 
   it 'prints a multiplication table of three primes' do
-    pending
     expect { subject.print }.to output(table).to_stdout
   end
 end
