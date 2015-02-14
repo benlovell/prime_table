@@ -25,6 +25,7 @@ module PrimeTable
     end
 
     def print
+      Printer.print(table)
     end
   end
 end

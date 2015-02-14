@@ -25,4 +25,12 @@ RSpec.describe PrimeTable::PrimeMultiplicationTable do
       )
     end
   end
+
+  describe '#print' do
+    it 'delegates printing' do
+      expect(PrimeTable::Printer).to receive(:print)
+
+      described_class.new(3).print
+    end
+  end
 end
