@@ -1,23 +1,19 @@
 module PrimeTable
   class PrimeMultiplicationTable
+    attr_reader :primes
+
     def initialize(number_of_primes)
       @primes = PrimeGenerator.generate(number_of_primes)
     end
 
     def table
       @table ||= begin
-        Array.new(@primes.count + 1).map { Array.new(@primes.count + 1) }.tap do |grid|
+        build_grid(primes.count + 1).tap do |grid|
           grid.each_with_index do |row, row_index|
             row.each_with_index do |cell, column_index|
-              next if row_index == 0 && column_index == 0
+              next if starting_cell?(row_index, column_index)
 
-              if row_index == 0
-                grid[row_index][column_index] = @primes[column_index - 1]
-              elsif column_index == 0
-                grid[row_index][column_index] = @primes[row_index - 1]
-              else
-                grid[row_index][column_index] = @primes[column_index - 1] * @primes[row_index - 1]
-              end
+              assign_cell(grid, row_index, column_index)
             end
           end
         end
@@ -26,6 +22,32 @@ module PrimeTable
 
     def print
       Printer.print(table)
+    end
+
+    private
+
+    def assign_cell(grid, row, column)
+      grid[row][column] = begin
+        if row.zero?
+          prime_at(column)
+        elsif column.zero?
+          prime_at(row)
+        else
+          prime_at(column) * prime_at(row)
+        end
+      end
+    end
+
+    def prime_at(index)
+      primes[index - 1]
+    end
+
+    def starting_cell?(row, column)
+      row.zero? && column.zero?
+    end
+
+    def build_grid(cells)
+      Array.new(cells).map { Array.new(cells) }
     end
   end
 end
